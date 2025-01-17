@@ -1,47 +1,46 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+  import { reactive } from 'vue';
+  import Calculadora from './components/Calculadora.vue';
+
+  const estado = reactive({
+    numero1: '',
+    numero2: '',
+    operacao: '+',
+    resultado: '',
+  });
+
+
+  const getResultado = () => {
+    const num1 = parseFloat(estado.numero1);
+    const num2 = parseFloat(estado.numero2);
+
+    if (isNaN(num1) || isNaN(num2)) {
+      return "Erro: Números inválidos";
+    }
+
+    switch (operacao) {
+      case '+':
+        return num1 + num2;
+      case '-':
+        return num1 - num2;
+      case '*':
+        return num1 * num2;
+      case '/':
+        return num2 !== 0 ? num1 / num2 : "Erro: Divisão por zero";
+      default:
+        return "Operação inválida";
+    }
+  }
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="container">
+    <Calculadora :primero-numero="estado.numero1" :trocar-operacao="estado.operacao" :segundo-numero="estado.numero2" :resultado-numero="getResultado()" />
+    
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>

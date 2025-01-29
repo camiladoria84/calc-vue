@@ -1,43 +1,52 @@
 <script setup>
-  import { reactive } from 'vue';
+  import { reactive, watch } from 'vue';
   import Calculadora from './components/Calculadora.vue';
+  
 
   const estado = reactive({
-    numero1: '',
-    numero2: '',
+    num1: '',
+    num2: '',
     operacao: '+',
-    resultado: '',
+    resultado: null,
   });
 
-
-  const getResultado = () => {
-    const num1 = parseFloat(estado.numero1);
-    const num2 = parseFloat(estado.numero2);
+  const calcularResultado = () => {
+    const num1 = parseFloat(estado.num1);
+    const num2 = parseFloat(estado.num2);
 
     if (isNaN(num1) || isNaN(num2)) {
-      return "Erro: Números inválidos";
+      estado.resultado = null; 
+      return;
     }
 
-    switch (operacao) {
+    switch (estado.operacao) {
       case '+':
-        return num1 + num2;
+        estado.resultado = num1 + num2;
+        break;
       case '-':
-        return num1 - num2;
+        estado.resultado = num1 - num2;
+        break;
       case '*':
-        return num1 * num2;
+        estado.resultado = num1 * num2;
+        break;
       case '/':
-        return num2 !== 0 ? num1 / num2 : "Erro: Divisão por zero";
+        estado.resultado = num2 !== 0 ? num1 / num2 : "Erro: Divisão por zero";
+        break;
       default:
-        return "Operação inválida";
-    }
-  }
+        estado.resultado = "Operação inválida";
+      }
+    };
+
+  watch(
+    () => [estado.num1, estado.num2, estado.operacao],
+    calcularResultado
+  );
 
 </script>
 
 <template>
   <div class="container">
-    <Calculadora :primero-numero="estado.numero1" :trocar-operacao="estado.operacao" :segundo-numero="estado.numero2" :resultado-numero="getResultado()" />
-    
+    <Calculadora :primero-numero="estado.num1" :operacao="estado.operacao" :segundo-numero="estado.num2" :resultado="estado.resultado" @update:primeiro-numero="estado.num1 = $event" @update:operacao="estado.operacao = $event" @update:segundo-numero="estado.num2 = $event" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-  const props = defineProps({ primeroNumero: String, operacao: String, segundoNumero: String, resultado: [Number, String]});
+  const props = defineProps({ primeroNumero: [String, Number], operacao: String, segundoNumero: [String, Number], resultado: [Number, String]});
   const emit = defineEmits(['update:primero-numero', 'update:operacao', 'update:segundo-numero', 'calcular-resultado']);
 </script>
 
@@ -24,7 +24,7 @@
         </select>
       </div>
       <div class="col-2">
-        <input id="num2" :value="props.segundoNumero" @input="emit('update:segundo-numero', $event.target.value)" @blur="$emit('calcular-resultado')" required type="number" placeholder="número 2" class="form-control" />
+        <input id="num2" :value="props.segundoNumero" @input="emit('update:segundo-numero', $event.target.value)" required type="number" placeholder="número 2" class="form-control" />
       </div>
       <div class="col-1">
         <label class="form-control text-center">=</label>

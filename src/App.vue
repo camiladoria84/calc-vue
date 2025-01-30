@@ -1,52 +1,41 @@
 <script setup>
-  import { reactive, watch } from 'vue';
+  import { computed, reactive, watch } from 'vue';
   import Calculadora from './components/Calculadora.vue';
   
 
   const estado = reactive({
-    num1: '',
-    num2: '',
-    operacao: '+',
-    resultado: null,
+    num1: "",
+    num2: "",
+    mudaOperacao: "+",
   });
 
-  const calcularResultado = () => {
+  const calcularResultado = computed(() => {
     const num1 = parseFloat(estado.num1);
     const num2 = parseFloat(estado.num2);
 
     if (isNaN(num1) || isNaN(num2)) {
-      estado.resultado = null; 
-      return;
+      return null
     }
 
-    switch (estado.operacao) {
+    switch (estado.mudaOperacao) {
       case '+':
-        estado.resultado = num1 + num2;
-        break;
+        return num1 + num2;
       case '-':
-        estado.resultado = num1 - num2;
-        break;
+        return num1 - num2;
       case '*':
-        estado.resultado = num1 * num2;
-        break;
+        return num1 * num2;
       case '/':
-        estado.resultado = num2 !== 0 ? num1 / num2 : "Erro: Divisão por zero";
-        break;
+        return num2 !== 0 ? num1 / num2 : "Erro: Divisão por zero";
       default:
-        estado.resultado = "Operação inválida";
+        return "Operação inválida";
       }
-    };
-
-  watch(
-    () => [estado.num1, estado.num2, estado.operacao],
-    calcularResultado
-  );
+    });
 
 </script>
 
 <template>
   <div class="container">
-    <Calculadora :primero-numero="estado.num1" :operacao="estado.operacao" :segundo-numero="estado.num2" :resultado="estado.resultado" @update:primeiro-numero="estado.num1 = $event" @update:operacao="estado.operacao = $event" @update:segundo-numero="estado.num2 = $event" />
+    <Calculadora :primeiroNumero="estado.num1" :mudaOperacao="estado.mudaOperacao" :segundoNumero="estado.num2" :novoResultado="calcularResultado" @update:primeiroNumero="estado.num1 = $event" @update:mudaOperacao="estado.mudaOperacao = $event" @update:segundoNumero="estado.num2 = $event" />
   </div>
 </template>
 
